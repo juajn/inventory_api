@@ -10,9 +10,5 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
       ALGORITHM: ${ALGORITHM}
-    ports:
-      - "8080:8080"
     volumes:
       - .:/app
-
-volumes: {}
