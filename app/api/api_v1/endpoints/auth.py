@@ -25,7 +25,7 @@ def register(user_in: UserCreate, db: Session = Depends(get_db_safe)):
 
 @router.post("/token", response_model=Token)
 def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db_safe)):
-    user = get_user_by_email(db, form_data.username)
+    user = get_user_by_email(db, form_data.email)
     if not user:
         raise HTTPException(status_code=400, detail="Email o contraseña incorrectos")
     if not verify_password(form_data.password, user.hashed_password):
