@@ -24,13 +24,22 @@ def register(user_in: UserCreate, db: Session = Depends(get_db_safe)):
 
 
 @router.post("/token", response_model=Token)
-def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db_safe)):
-    user = get_user_by_email(db, form_data.email)
+def login_for_access_token(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db_safe)
+):
+    # form_data.username ES EL EMAIL
+    user = get_user_by_email(db, form_data.username)
     if not user:
         raise HTTPException(status_code=400, detail="Email o contraseña incorrectos")
+
     if not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Email o contraseña incorrectos")
 
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
-    access_token = create_access_token(subject=str(user.id), expires_delta=access_token_expires)
+    access_token = create_access_token(
+        subject=str(user.id),
+        expires_delta=access_token_expires
+    )
+
     return {"access_token": access_token, "token_type": "bearer"}
