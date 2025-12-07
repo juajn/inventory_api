@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     # === DATABASE ===
-    DATABASE_URI: str = (
+    DATABASE_URL: str = (
         "mysql+pymysql://root:"
         "bsbZgQBHGh2jNP2GAbN2l2hag5VmrzBjJw8p5thK3AbbZhHuAkYxKQOPHEWiZpUw"
         "@adsodigital.sbs:3306/inventory_db"

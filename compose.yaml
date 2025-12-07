@@ -5,6 +5,9 @@ services:
     build: .
     container_name: fastapi_inventory
     restart: always
+    ports:
+    - "8080:8080"
+
     environment:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
