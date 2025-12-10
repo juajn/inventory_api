@@ -4,6 +4,8 @@ FROM python:3.11-slim
 # Evita que Python genere archivos .pyc
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
+ENV FORCE_HTTPS=true
+ENV X_FORWARDED_PROTO=https
 
 # Instalar dependencias del sistema (para mysqlclient)
 RUN apt-get update && \
