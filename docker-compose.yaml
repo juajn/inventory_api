@@ -1,17 +1,15 @@
-version: "3.9"
-
 services:
   api:
     build: .
     container_name: fastapi_inventory
     restart: always
     ports:
-    - "8010:8080"
-
+      - "8080:8080"
     environment:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
       ALGORITHM: ${ALGORITHM}
+
     volumes:
       - .:/app

@@ -1,6 +1,6 @@
-from urllib import request
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from app.db.base import Base
 from app.db.session import engine
 from app.api.api_v1.endpoints import auth, users, products, inventory
@@ -24,7 +24,6 @@ if os.getenv("ENVIRONMENT") == "development":
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
-    allow_origins=["http://localhost:5173", "https://inventoryapi.adsodigital.sbs"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=[
@@ -42,9 +41,6 @@ app.add_middleware(
 )
 
 # IMPORTANTE: Para depuración, agrega middleware personalizado
-from fastapi import Request
-from fastapi.responses import JSONResponse
-
 @app.middleware("http")
 async def add_cors_debug_headers(request: Request, call_next):
     response = await call_next(request)
@@ -70,14 +66,14 @@ def root():
 
 # Endpoint para probar CORS
 @app.options("/{full_path:path}")
-async def options_handler(full_path: str):
+async def options_handler(full_path: str, request: Request):
     """Manejador explícito para OPTIONS requests"""
     return JSONResponse(
         content={"message": "CORS preflight"},
         headers={
             "Access-Control-Allow-Origin": request.headers.get("origin", "*"),
-            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-            "Access-Control-Allow-Headers": "Authorization, Content-Type",
+            "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS, PATCH",
+            "Access-Control-Allow-Headers": "Authorization, Content-Type, Accept, Origin, X-Requested-With",
             "Access-Control-Max-Age": "600",
         }
     )
