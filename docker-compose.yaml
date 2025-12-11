@@ -3,13 +3,35 @@ services:
     build: .
     container_name: fastapi_inventory
     restart: always
+    
     ports:
       - "8050:8050"
+
+    volumes:
+      - .:/app
+
     environment:
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES}
       ALGORITHM: ${ALGORITHM}
 
-    volumes:
-      - .:/app
+    labels:
+      - "traefik.enable=true"
+
+      # Router FASTAPI — usa TU dominio real
+      - "traefik.http.routers.inventoryapi.rule=Host(`inventoryapi.adsodigital.sbs`)"
+      - "traefik.http.routers.inventoryapi.entrypoints=websecure"
+      - "traefik.http.routers.inventoryapi.tls=true"
+
+      # Middleware CORS — aquí está la magia 🔥
+      - "traefik.http.middlewares.inventory-cors.headers.accessControlAllowOriginList=https://frontinventory.adsodigital.sbs"
+      - "traefik.http.middlewares.inventory-cors.headers.accessControlAllowMethods=GET,POST,PUT,DELETE,OPTIONS,PATCH"
+      - "traefik.http.middlewares.inventory-cors.headers.accessControlAllowHeaders=*"
+      - "traefik.http.middlewares.inventory-cors.headers.accessControlAllowCredentials=true"
+
+      # Se enlaza el middleware al router
+      - "traefik.http.routers.inventoryapi.middlewares=inventory-cors"
+
+      # Puerto interno del contenedor
+      - "traefik.http.services.inventoryapi.loadbalancer.server.port=8050"
