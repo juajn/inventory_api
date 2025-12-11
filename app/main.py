@@ -13,7 +13,7 @@ origins = [
     "http://localhost:5173",      # Vite dev server
     "http://localhost:3000",      # Create React App
     "http://127.0.0.1:5173",      # Localhost alternativo
-    "https://tu-frontend.com",    # Tu dominio en producción
+    "https://frontinventory.adsodigital.sbs",    # Tu dominio en producción
 ]
 
 # Si estás en desarrollo, permite también el puerto actual
